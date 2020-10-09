@@ -84,6 +84,75 @@ def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
     w -= gamma * gradient
     return w, loss, np.linalg.norm(gradient)
 
+
+def least_squares(y, tx):
+    """calculates the least squares solution 
+    using the normal equation to compute the weights,
+    solves X.T*X*w = X.T * y (gradient of the loss function, w is the unknown) 
+    
+    input: 
+    	y = labels
+    	tx = feature matrix
+    
+    output:
+    	weights = weights corresponding to the least squares solution
+    	mse = mse loss corresponding to the least squares solution
+    
+    """	
+    weights = np.linalg.solve(tx.T.dot(tx),tx.T.dot(y))
+    mse = compute_mse(y,tx,weights) 
+    return weights, mse
+
+    
+def least_squares_GD(y, tx, initial_w, max_iters, gamma):
+    """calculates the least squares solution using 
+    gradient descent to compute the weights.
+    
+    input: 
+    	y = labels
+    	tx = feature matrix
+    	initial_w = initial value for the weights
+    	max_iters = number of steps
+    	gamme = learning rate
+    
+    output:
+    	weights = weights corresponding to the last step
+    	mse = mse loss corresponding to the last step
+    
+    """
+    
+    losses, ws = gradient_descent(y, tx, initial_w, max_iters, gamma)
+    weights = ws[-1]
+    mse = losses[-1] 
+    return weights, mse
+    
+    
+def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
+    """calculates the least squares solution using stochastic 
+    gradient descent to compute the weights. Uses batch_iter from
+    proj1_helpers.py to compute a minibatch for the dataset.
+    
+    input: 
+    	y = labels
+    	tx = feature matrix
+    	initial_w = initial value for the weights
+    	max_iters = number of steps
+    	gamme = learning rate
+    
+    output:
+    	weights = weights corresponding to the last step
+    	mse = mse loss corresponding to the last step
+  
+    """
+    
+    # default batch_size = 1
+    batch_size = 1
+    losses, ws = stochastic_gradient_descent(y, tx, initial_w, batch_size, max_iters, gamma)
+    weights = ws[-1]
+    mse = losses[-1] 
+    return weights, mse
+
+
 ################################################
 # Ridge Regression
 ################################################
