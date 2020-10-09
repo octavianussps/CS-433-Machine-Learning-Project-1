@@ -3,6 +3,7 @@ from implementation import *
 from helpers import *
 from findbestdegree import *
 from proj1_helpers import *
+from datetime import datetime
 
 OUT_DIR = "../out"
 
@@ -22,6 +23,7 @@ def main():
     lambdas = np.logspace(-4, 0, 2)
     best_degree = best_degree_selection(x_train,ys_train,degrees, 2, lambdas);
     print("BUILDING POLYNOMIALS with degree", best_degree)
+    best_degree=11
     tx_train = build_poly(x_train, best_degree)
     tx_test = build_poly(x_test, best_degree)
 
