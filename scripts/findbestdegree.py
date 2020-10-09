@@ -27,13 +27,14 @@ def cross_validation(y, x, k_indices, k, lambda_, degree):
     tx_tr = build_poly(x_tr, degree)
     tx_te = build_poly(x_te, degree)
     # ridge regression
-    w = ridge_regression(y_tr, tx_tr, lambda_)
+    w,_ = ridge_regression(y_tr, tx_tr, lambda_)
     # calculate the loss for train and test data
+   # print(y_tr.shape,"sss",tx_tr.shape,"de",type(w))
     loss_tr = np.sqrt(2 * compute_loss(y_tr, tx_tr, w))
     loss_te = np.sqrt(2 * compute_loss(y_te, tx_te, w))
     return loss_tr, loss_te,w
 
-def best_degree_selection(degrees, k_fold, lambdas, seed = 1):
+def best_degree_selection(x, y, degrees, k_fold, lambdas, seed = 1):
     # split data in k fold
     k_indices = build_k_indices(y, k_fold, seed)
     

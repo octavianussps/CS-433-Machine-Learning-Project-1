@@ -1,3 +1,5 @@
+import numpy as np
+
 
 def standardize(x_test, x_train):
     """
