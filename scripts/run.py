@@ -42,7 +42,7 @@ def main():
 
     print("EXPORTING CSV")
     name_out = "{}/submission.csv".format(OUT_DIR)
-    create_csv_submission(ids_test, y_pred, name_out )
+    create_csv_submission(ids_test, y_pred, "{}/submission-{}.csv".format(OUT_DIR, datetime.now()))
 
 
 if __name__ == '__main__':
