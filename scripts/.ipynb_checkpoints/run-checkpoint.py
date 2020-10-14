@@ -19,12 +19,12 @@ def main():
     x_train, ys_train = remove_outliers(x_train, ys_train)
 
     print("FINDING DEGREE")
-    degrees = np.arange(10,11);
+    degrees = np.arange(2,11);
     lambdas = np.logspace(-4, 0, 2)
     best_degree = best_degree_selection(x_train,ys_train,degrees, 2, lambdas);
    
     print("BUILDING POLYNOMIALS with degree ", best_degree)
-    best_degree=11
+    #best_degree=11
     tx_train = build_poly(x_train, best_degree)
     tx_test = build_poly(x_test, best_degree)
 

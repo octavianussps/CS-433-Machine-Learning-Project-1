@@ -45,7 +45,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     """
     if (initial_w is None):
         initial_w = np.zeros(tx.shape[1])
-    w = initial_w
+    w = initial_w.astype(float)
     losses, ws = gradient_descent(y, tx, w, max_iters, gamma)
     weights = ws[-1]
     mse = losses[-1] 

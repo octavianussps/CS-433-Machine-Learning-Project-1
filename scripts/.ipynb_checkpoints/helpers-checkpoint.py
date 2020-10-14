@@ -3,13 +3,19 @@ import numpy as np
 
 def gradient_descent(y, tx, initial_w, max_iters, gamma):
     """Gradient descent algorithm."""
+    print("using gradient descent{}".format(len(y)))
     # Define parameters to store w and loss
-    ws = [initial_w]
+    ws = []
+    
     losses = []
     w = initial_w
+    ws.append(w)
     for n_iter in range(max_iters):
+       
         gradient = compute_gradient(y,tx,w)
         loss = compute_loss(y,tx,w)
+        #if np.isinf(loss):
+        #     raise ValueError("Infinite loss in least_squares_GD with gamma %.0e, exiting."%gamma)
         w = w - gamma * gradient
         # store w and loss
         ws.append(w)
@@ -90,14 +96,17 @@ def new_labels(w, tx):
     y_pred[np.where(y_pred > 0.5)] = 1
     return y_pred
 
-def compute_gradient(y, tx, w):
+def compute_gradient(y, tx, w, kind='mse'):
     """
     Compute the gradient
     """
-    k = -1.0 / y.shape[0]
-    y_pred = tx.dot(w)
-    e = y - y_pred
-    return k * np.transpose(tx).dot(e)
+    error = y - tx.dot(w)
+    if kind == 'mse':
+        return -tx.T.dot(error)/len(y)
+    elif kind == 'mae':
+        return -np.sign(error).dot(tx)/len(y) #Sum rows
+    else:
+        raise NotImplementedError
 
 def calculate_gradient(y, tx, w):
     """
