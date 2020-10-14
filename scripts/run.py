@@ -22,19 +22,27 @@ def main():
     degrees = np.arange(10,11);
     lambdas = np.logspace(-4, 0, 2)
     best_degree = best_degree_selection(x_train,ys_train,degrees, 2, lambdas);
-    print("BUILDING POLYNOMIALS with degree", best_degree)
+   
+    print("BUILDING POLYNOMIALS with degree ", best_degree)
     best_degree=11
     tx_train = build_poly(x_train, best_degree)
     tx_test = build_poly(x_test, best_degree)
 
-    print("LEARNING MODEL BY LEAST SQUARES")
-    w, mse = least_squares(ys_train, tx_train)
-
+#    print("LEARNING MODEL BY LEAST SQUARES")
+ #   w, mse = least_squares(ys_train, tx_train)
+	
+    print("LEARNING MODEL BY least square SGD")
+    max_iters = 30
+    gamma = 0.1
+    w, mse = least_squares_SGD(ys_train, tx_train, None, max_iters, gamma)
+	
+	
     print("PREDICTING VALUES")
     y_pred = predict_labels(w, tx_test)
 
     print("EXPORTING CSV")
-    create_csv_submission(ids_test, y_pred, "{}/submission-{}.csv".format(OUT_DIR, datetime.now()))
+    name_out = "{}/submission.csv".format(OUT_DIR)
+    create_csv_submission(ids_test, y_pred, name_out )
 
 
 if __name__ == '__main__':
