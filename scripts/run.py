@@ -20,14 +20,14 @@ def main():
     
     print("finding best degree")
     degrees = np.arange(10,12);
-    lambdas = np.logspace(-4, 0, 20)
+    #lambdas = np.logspace(-4, 0, 20)
     # Cross-Validation 
-    k_fold = 4
+    #k_fold = 4
     # best degree selection uses ridge_regression to find the best lambda
-    best_degree = best_degree_selection(x_train, ys_train, degrees, k_fold, lambdas);
+    #best_degree = best_degree_selection(x_train, ys_train, degrees, k_fold, lambdas);
     
-    print("building polynomial with degree", best_degree)
-    #best_degree=11
+    #print("building polynomial with degree", best_degree)
+    best_degree=10
     tx_train = build_poly(x_train, best_degree)
     tx_test = build_poly(x_test, best_degree)
 
