@@ -53,7 +53,7 @@ def remove_outliers(x_train, ys_train):
     :return: Train data without outliers
     """
     index = []
-    threshold =8.5
+    threshold = 8.5
     for i in range(x_train.shape[0]):
         if np.amax(np.abs(x_train[i, :])) > threshold:
             index.append(i)
