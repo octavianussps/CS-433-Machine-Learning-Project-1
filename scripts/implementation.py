@@ -118,7 +118,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         w -= gamma * grad
         losses.append(loss)
         # stop
-        if np.abs(losses[-1] - losses[-2]) < THRESHOLD:
+        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < THRESHOLD:
             gamma = gamma / 10
             if gamma < 1e-10:
                 break
