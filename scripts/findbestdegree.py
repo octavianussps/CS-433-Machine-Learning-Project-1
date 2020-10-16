@@ -1,6 +1,6 @@
 import numpy as np
 from helpers import *
-from implementation import *
+from implementations import *
 
 
 def build_k_indices(y, k_fold, seed):
@@ -15,7 +15,7 @@ def build_k_indices(y, k_fold, seed):
 
 def cross_validation(y, x, k_indices, k, lambda_, degree):
     """return the loss of ridge regression."""
-    # get k'th subgroup in test, others in train
+    # get k'th subgroup in test, other k-1 ones in train
     te_indice = k_indices[k]
     tr_indice = k_indices[~(np.arange(k_indices.shape[0]) == k)]
     tr_indice = tr_indice.reshape(-1)
@@ -27,9 +27,11 @@ def cross_validation(y, x, k_indices, k, lambda_, degree):
     tx_tr = build_poly(x_tr, degree)
     tx_te = build_poly(x_te, degree)
     # ridge regression
-    w,_ = ridge_regression(y_tr, tx_tr, lambda_)
+    #w,_ = ridge_regression(y_tr, tx_tr, lambda_)
+    w,_ = least_squares(y_tr, tx_tr)
+
     # calculate the loss for train and test data
-   # print(y_tr.shape,"sss",tx_tr.shape,"de",type(w))
+    # print(y_tr.shape,"sss",tx_tr.shape,"de",type(w))
     loss_tr = np.sqrt(2 * compute_loss(y_tr, tx_tr, w))
     loss_te = np.sqrt(2 * compute_loss(y_te, tx_te, w))
     return loss_tr, loss_te,w
