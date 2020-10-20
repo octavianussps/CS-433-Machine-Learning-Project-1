@@ -4,7 +4,15 @@ from implementations import *
 
 
 def build_k_indices(y, k_fold, seed):
-    """build k indices for k-fold."""
+    """
+    build k indices for k-fold.
+    inputs :
+        y: labels
+        k_fold: nb folds in which data is split
+        seed: nb used to initialize a pseudorandom number generator
+    output:
+        k_fold vectors in which indices of input data are saved
+    """
     num_row = y.shape[0]
     interval = int(num_row / k_fold)
     np.random.seed(seed)
@@ -14,7 +22,18 @@ def build_k_indices(y, k_fold, seed):
 
 
 def cross_validation(y, x, k_indices, k, lambda_, degree):
-    """return the loss of ridge regression."""
+    """
+    return the loss of ridge regression.
+    inputs :
+        y: label
+        x: input variables
+        k_indices : list of lists containing the indices of elements from x that will be part of the test set
+        k: nb fold we are using for test set
+        lambda_: regularization parameter
+        degree: degree of the polynomial
+    output : 
+        the best degree
+    """
     # get k'th subgroup in test, other k-1 ones in train
     te_indice = k_indices[k]
     tr_indice = k_indices[~(np.arange(k_indices.shape[0]) == k)]

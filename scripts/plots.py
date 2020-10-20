@@ -9,7 +9,14 @@ import matplotlib.pyplot as plt
 
 
 def cross_validation_visualization(degrees, mse_tr, mse_te):
-    """visualization the curves of mse_tr and mse_te."""
+    """visualization the curves of mse_tr and mse_te.
+    inputs :
+        degree: List of degrees to be tested
+        mse_tr : List of train error values for the different tested degrees
+        mse_te : List of test error values for the different tested degrees
+    output:
+        plot with the given values
+    """
     plt.plot(degrees, mse_tr, marker=".", color='b', label='train error')
     plt.plot(degrees, mse_te, marker=".", color='r', label='test error')
     plt.xlabel("degree")

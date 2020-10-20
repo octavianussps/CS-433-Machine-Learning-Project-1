@@ -110,7 +110,7 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
     for minibatch_y, minibatch_tx in batch_iter(y, tx, 32):
         <DO-SOMETHING>
 
-    input: 
+    inputs: 
     	y = labels
     	tx = feature matrix
         batch_size = data points used included in the batch
