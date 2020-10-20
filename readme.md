@@ -16,6 +16,7 @@ This readme file contains useful information of the structure of the project con
 | scripts   | all the python scripts we used in this project, further explanation below.
  + *implementations.py* contains the six regression methods.
  + *helpers.py* contains several helper functions to run the regression methods such as compute_loss or compute_gradient.
+ + *proj1_helpers.py* is used to load the data, predict labels for the test data and tro create a submission.
  + *findbestdegree.py* is a script which uses cross validation in order to find out the best degree and/or the best lambda for the different methods as well as functions to load and submit the data.
 + *plots.py* visualizes the affect of different choices of hyperparameters on the RMSE of the method respectively.
 + *preprocessing.py* preprocesses the data i.e. standardizes it and removes outliers and missing values.
