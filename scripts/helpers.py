@@ -2,7 +2,21 @@
 import numpy as np
 
 def gradient_descent(y, tx, initial_w, max_iters, gamma):
-    """Gradient descent algorithm."""
+    """
+    Gradient descent algorithm.
+    
+    inputs: 
+    	y = labels
+    	tx = feature matrix
+        initial_w = vector of initial weights
+        max_iters = number of maximum iterations on the loop
+        gamma :  Step size of the iterative method
+    
+    output:
+    	ws = weights corresponding to logistic regression solution
+    	losses = mse loss corresponding to the logistic regression solution
+    """
+
     print("using gradient descent{}".format(len(y)))
     # Define parameters to store w and loss
     ws = []
@@ -25,24 +39,54 @@ def gradient_descent(y, tx, initial_w, max_iters, gamma):
     return losses, ws
 
 def build_poly(x, degree):
-    """polynomial basis functions for input data x, for j=0 up to j=degree.
-     builds feature matrix"""
+    """
+    Polynomial basis functions for input data x, for j=0 up to j=degree.
+    builds feature matrix
+    
+    inputs: 
+    	x : features matrix X
+        degree : degree used to create the polynomial
+    
+    output:
+    	poly : the features matrix X after polynomial expansion
+    """
     poly = np.ones((len(x), 1))
     for deg in range(1, degree+1):
         poly = np.c_[poly, np.power(x, deg)]
     return poly
 
 def compute_stoch_gradient(y, tx, w):
-    """Compute a stochastic gradient from just few examples n and their corresponding y_n labels."""
+    """
+    Compute a stochastic gradient from just few examples n and their corresponding y_n labels.
+    inputs: 
+    	y = labels
+    	tx = feature matrix
+        w: weight
+    
+    output:
+    	gradient : Gradient for loss function of Mean Squared Error evaluated in w
+    """
     N = len(y)
     e = y - tx.dot(w)
     gradient = -tx.T.dot(e) / N
     return gradient
-    #raise NotImplementedError
 
 
 def stochastic_gradient_descent(y, tx, initial_w, batch_size, max_iters, gamma):
-    """Stochastic gradient descent algorithm., uses batch_iter algorithm"""
+    """
+    Stochastic gradient descent algorithm., uses batch_iter algorithm
+    inputs: 
+    	y = labels
+    	tx = feature matrix
+        initial_w = vector of initial weights
+        max_iters = number of maximum iterations on the loop
+        gamma :  Step size of the iterative method
+    
+    outputs:
+    	ws = weights corresponding to stochastic regression solution
+    	losses = mse loss corresponding to the stochastic regression solution
+    
+    """
     ws = [initial_w]
     losses = []
     w = initial_w
@@ -54,8 +98,6 @@ def stochastic_gradient_descent(y, tx, initial_w, batch_size, max_iters, gamma):
             # store w and loss
             ws.append(w)
             losses.append(loss)
-        #print("SGD({bi}/{ti}): loss={l}, w0={w0}, w1={w1}".format(
-           #   bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
     return losses, ws
 
 def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
@@ -67,6 +109,16 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
     Example of use :
     for minibatch_y, minibatch_tx in batch_iter(y, tx, 32):
         <DO-SOMETHING>
+
+    input: 
+    	y = labels
+    	tx = feature matrix
+        batch_size = data points used included in the batch
+        num_batches= Number of batches to be generated
+        shuffle=True
+    output;
+    Iterator which gives mini-batches of `batch_size` matching elements from `y` and `tx`
+
     """
     data_size = len(y)
 
@@ -86,12 +138,21 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
 def sigmoid(t):
     """
     Apply sigmoid function on t
+    input:
+        t = Vector in which sigmoid is evaluated
+    output:
+        Sigmoid function evaluated in t
     """
     return 1.0 / (1 + np.exp(-t))
     
 def new_labels(w, tx):
     """
     Generates class predictions given weights, and a test data matrix
+    input: 
+    	w = weight
+    	tx = feature matrix
+    output
+        y_pred :class predictions given weights, and a test data matrix
     """
     y_pred = tx.dot(w)
     y_pred[np.where(y_pred <= 0.5)] = 0
@@ -101,6 +162,13 @@ def new_labels(w, tx):
 def compute_gradient(y, tx, w, kind='mse'):
     """
     Compute the gradient
+    inputs:
+        y = labels
+    	tx = feature matrix
+        w : weight
+        kind : mse or mae
+    output:
+         Gradient for loss function evaluated in w
     """
     error = y - tx.dot(w)
     if kind == 'mse':
@@ -113,6 +181,12 @@ def compute_gradient(y, tx, w, kind='mse'):
 def calculate_gradient(y, tx, w):
     """
     Compute the gradient of the negative log likelihood loss function
+    inputs:
+        y = labels
+    	tx = feature matrix
+        w : weight
+    output:
+        gradient of the negative log likelihood loss function
     """
     y_pred = new_labels(w, tx)
     s = sigmoid(y_pred)
@@ -121,7 +195,14 @@ def calculate_gradient(y, tx, w):
 
 def compute_loss(y, tx, w, kind='mse'):
     """
-    MSE or MAE loss functions.
+    Computes the loss, based on the cost function specified
+    inputs:
+        y = labels
+    	tx = feature matrix
+        w : weight
+        kind: mae or mse
+    output:
+        the loss
     """
     error = y - tx.dot(w)
     if kind == 'mse':
@@ -135,6 +216,12 @@ def compute_loss(y, tx, w, kind='mse'):
 def calculate_loss(y, tx, w):
     """
     Compute the cost by negative log likelihood
+    inputs:
+        y = labels
+    	tx = feature matrix
+        w : weight
+    output:
+        Loss value by negative log likelihood evaluated in w
     """
     pred = sigmoid(tx.dot(w))
     loss = y.T.dot(np.log(pred)) + (1 - y).T.dot(np.log(1 - pred))
@@ -143,6 +230,12 @@ def calculate_loss(y, tx, w):
 def calculate_loss_reg(y, tx, w, lambda_):
     """
     Compute the cost by negative log likelihood for Regularized Logistic Regression
+    inputs:
+        y = labels
+    	tx = feature matrix
+        lambda_: Regularization parameter
+    output:
+        Loss value by negative log likelihood evaluated in w for Regularized Logistic Regression
     """
     n = tx.shape[0]
     out= calculate_loss(y, tx, w) + (lambda_ / (2 * n)) * np.power(np.linalg.norm(w), 2)
@@ -150,7 +243,15 @@ def calculate_loss_reg(y, tx, w, lambda_):
 
 def penalized_logistic_regression(y, tx, w, lambda_):
     """
-    return the loss and gradient.
+    Return the loss and gradient by the algorithm of the penalized logistic regression
+    inputs:
+        y = labels
+    	tx = feature matrix
+        w :  weight
+        lambda_: Regularization parameter
+    output:
+        loss
+        gradient;
     """
     num_samples = y.shape[0]
     loss = calculate_loss(y, tx, w) + lambda_ * np.squeeze(w.T.dot(w))
@@ -160,19 +261,32 @@ def penalized_logistic_regression(y, tx, w, lambda_):
 def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
     """
     One step of gradient descent, using the penalized logistic regression.
+    inputs:
+        y = labels
+    	tx = feature matrix
+        w :  weight
+        gamma :  Step size of the iterative method 
+        lambda_: Regularization parameter
+    output:
+        w: updated w after 1 step of gradient descent for penalized logistic regression
+        loss: after 1 step of gradient descent for penalized logistic regression
+        norm of the gradient
+
     """
     loss, gradient = penalized_logistic_regression(y, tx, w, lambda_)
     w -= gamma * gradient
     return w, loss, np.linalg.norm(gradient)
 
-def predict_labels(weights, data):
+def predict_labels(w, data):
     """
     Generates class predictions given weights, and a test data matrix for Least Squares
-    :param weights: Vector of weights of size 1x(1+(DG*D))
-    :param data: Matrix containing the test data
-    :return: Class predictions for given weights and a test data matrix for Least Squares
+    inputs : 
+        w: weights
+        data: the test data
+    output:
+        y_pred : predictions for w and the data matrix for Least Squares
     """
-    y_pred = np.dot(data, weights)
+    y_pred = np.dot(data, w)
     y_pred[np.where(y_pred <= 0)] = -1
     y_pred[np.where(y_pred > 0)] = 1
     return y_pred

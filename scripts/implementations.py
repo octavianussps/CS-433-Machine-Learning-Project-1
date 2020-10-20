@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import numpy as np
 from helpers import *
-######################################
-# Helper Functions
-######################################
 
+
+######################################
+# Least Squares Functions
+######################################
 
 
 
@@ -86,8 +87,18 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
 
 def ridge_regression(y, tx, lambda_):
     """
-    Implement ridge regression
-    """
+    Ridge regression using normal equations
+    
+    input: 
+    	y = labels
+    	tx = feature matrix
+        lambda_ :  Regularization parameter
+    
+    output:
+    	w = weights corresponding to ridge regression solution
+    	mse = mse loss corresponding to the ridge regression solution
+    
+    """	
     txt = np.transpose(tx)
     w = np.linalg.solve((txt.dot(tx) + lambda_ * 2 * y.shape[0] * np.identity(tx.shape[1])), txt.dot(y))
     return w, compute_loss(y, tx, w)
@@ -102,8 +113,21 @@ THRESHOLD = 1e-6
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
+    
     Logistic regression using gradient descent
+    
+    input: 
+    	y = labels
+    	tx = feature matrix
+        initial_w = vector of initial weights
+        max_iters = number of maximum iterations on the loop
+        gamma :  Step size of the iterative method
+    
+    output:
+    	w = weights corresponding to logistic regression solution
+    	losses[-1] = mse loss corresponding to the logistic regression solution
     """
+
    # initializing the weight
     losses = []
     if (initial_w is None):
@@ -129,7 +153,19 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     """
-    applies regularized logistic regression using stochastic gradient descent to optimize w
+    
+    Regularized Logistic regression using gradient descent
+    
+    input: 
+    	y = labels
+    	tx = feature matrix
+        initial_w = vector of initial weights
+        max_iters = number of maximum iterations on the loop
+        gamma :  Step size of the iterative method
+    
+    output:
+    	w = weights corresponding to logistic regression solution
+    	losses[-1] = mse loss corresponding to the logistic regression solution
     """
     # initializing the weight
     if (initial_w is None):
