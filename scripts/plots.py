@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 
 
 def cross_validation_visualization(degrees, mse_tr, mse_te):
-    """visualization the curves of mse_tr and mse_te.
+    """
+    visualization the curves of mse_tr and mse_te.
     inputs :
         degree: List of degrees to be tested
         mse_tr : List of train error values for the different tested degrees
@@ -35,6 +36,11 @@ def cross_validation_visualization(degrees, mse_tr, mse_te):
 
 
 def cross_validation_demo():
+     """
+    Demo of the cross validation
+    output:
+        plot with the given values
+    """
     seed = 12
     degrees = np.arange(2,7)
     degree = 12
