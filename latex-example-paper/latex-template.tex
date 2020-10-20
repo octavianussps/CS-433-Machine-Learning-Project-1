@@ -26,10 +26,17 @@ Then we implement the six different methods: least\_squares, least\_squares\_GD,
 
 \section{Data Preprocessing}
 \label{sec:prepro}
+In order to deal with the data, we need to standardize it. The standardization help us to scale the data in a bounded interval and detect that every data has to be known.
+Because of this method, we can delete outliers. The standardization is done in both test and train set.
+\\
+The preprocessing deals with:
+\begin{itemize}
+  \item Deletion of outliers in the train data
+  \item Deletion of the entries in the the sample that contain the -999 value
+  \item Deletion of the feature in the the sample that contain the -999 value
+  \item Subtittion of the values -999 by the mean of the correponding values
+\end{itemize}
 
-standardize (test and train data)\\
-replace by 0  values with = -999 (test and train data)\\
-delete outliers (train data)
 
 
 
