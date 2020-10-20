@@ -1,6 +1,6 @@
 
 # Machine Learning Project 1
-Marion Chabrier, Valentin Margraf, Octavianus Sinaga
+**Marion Chabrier, Valentin Margraf, Octavianus Sinaga**
 
 This readme file contains useful information of the structure of the project containing the code and report. For further information of the project and its results we advise you to read the report. 
 
@@ -25,3 +25,14 @@ This readme file contains useful information of the structure of the project con
 
 In order to submit the predictions we give on the test data, you have to run the *run.py* file. It will load the data, preprocess it,
 build the feature matrix and then train the model (in this case Least Squares). Then the model is used to predict the labels of the test data and the submission.csv file will be generated.
+
+It will give some output like this:
+
+```
+loading data
+preprocessing data
+building polynomial with degree 11
+training model with least squares
+predicting labels for test data
+exporting csv file
+```
