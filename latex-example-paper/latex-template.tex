@@ -20,16 +20,24 @@ The goal of this project is to apply Machine Learning techniques on data from CE
 
 \section{Introduction}
 First we preprocess the data i.e. standardize it and get rid of missing values and outliers.
-Then we implement the six different methods: least\_squares, least\_squares\_GD, least\_squares\_SGD, ridge\_regression, logistic\_regression, regularized\_logistic\_regression. We use each method to learn a model on the training data and see how well they perform. For each model we additionally vary the hyperparameters to optimize the performance. Finally we compare their performances on the test data from CERN.
+Then we implement the six different methods: Least Squares, Least Squares GD, Least Squares SGD, Ridge Regression, Logistic Regression, Regularized Logistic Regression. We use each method to learn a model on the training data and see how well they perform. For each model we additionally vary the hyperparameters to optimize the performance. Finally we compare their performances on the test data from CERN by submitting it on AICrowd.
 
 
 
 \section{Data Preprocessing}
 \label{sec:prepro}
+In order to deal with the data, we need to standardize it. The standardization helps us to scale the data in a bounded interval and detects that every data has to be known. We standardize both, the test and the train data set. \\
+We afterwards delete outliers, that means we delete values, which are further away from the mean than a certain threshold. 
+\\
+The preprocessing deals with:
+\begin{itemize}
+	\item Deletion of outliers in the train data
+	\item Deletion of the entries in the the sample that contains the -999 value
+	\item Deletion of the feature in the sample that contains the -999 value
+	\item Substitution of the values -999 by the mean of the corresponding values
+\end{itemize}
 
-standardize (test and train data)\\
-replace by 0  values with = -999 (test and train data)\\
-delete outliers (train data)
+
 
 
 
@@ -37,7 +45,7 @@ delete outliers (train data)
 \label{sec:tips-writing}
 
 
-For each model we run 4-fold cross validation on our training data to tune our hyperparameters in order to optimize our model. The hyperparameters in this case are the \textit{degree} for all the models and the constant \textit{lambda\_} for the Ridge Regression and the Regularized Logistic Regression.
+For each model we run 4-fold cross validation on our training data to tune our hyperparameters in order to optimize our model. The hyperparameters in this case are the \textit{degree} for all the models and the constant \textit{lambda} for the Ridge Regression and the Regularized Logistic Regression.
 \\
 Figure 1 shows how the choice of the \textit{degree} affects the \textit{RMSE} in the case of Least Squares. We see that for degree = 11 we get our best result, whereas for higher degrees the model will overfit. Lower degrees instead give a bigger \textit{RMSE}, hence the model underfits.
 
@@ -46,7 +54,7 @@ Figure 1 shows how the choice of the \textit{degree} affects the \textit{RMSE} i
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\columnwidth]{cross_validation_leastsquares.png}
-  \caption{RMSE for different degrees using least\_squares.}
+  \caption{RMSE for different degrees using Least Squares.}
   \vspace{-3mm}
   \label{fig:crossvalidationleastsquares}
 \end{figure}
@@ -63,19 +71,19 @@ Figure 1 shows how the choice of the \textit{degree} affects the \textit{RMSE} i
 \end{figure}
  %%%%pic to be added
  %%% find optimal lambda
- For the ridge\_regression a degree of!!!!range angeben?? 12 gave us the best result. Using cross validation we computed the \textit{RMSE} for different values of \textit{lambda\_} in order to optimize this hyperparameter. We find out, that a value of approximately 0.0059 gave the best result, which can be checked easily in Figure 2. When we choose this value too small, the test error gets much bigger, whereas the training error reduces. If \textit{lambda\_} is too big, both, the test and training error augment.\\
+ For the Ridge Regression a degree of 12 gave us the best result. Using cross validation we computed the \textit{RMSE} for different values of \textit{lambda} in order to optimize this hyperparameter. We find out, that a value of approximately 0.0059 gave the best result, which can be checked in Figure 2. When we choose this value too small, the test error gets much bigger, whereas the training error reduces. If \textit{lambda} is too big, both, the test and training error augment.
+ The final used hyperparameter for each method can be found in table 1.\\
 
-\section{Results}
 
 \begin{table}[htbp]
 	\centering
 	\begin{tabular}[c]{|l||l|l|}
 		\hline
-		Methods&d&lambda\_\\
+		Methods&degree&lambda\\
 		\hline
-		Least Square& 11 &-\\
-		Least Square GD& 10 & -\\
-		Least Square SGD & 10 &-\\		Ridge Regression&12&0.00599\\
+		Least Squares& 11 &-\\
+		Least Squares GD& 10 & -\\
+		Least Squares SGD & 10 &-\\		Ridge Regression&12&0.00599\\
 		Logistic Regression & 10&-\\
 		Reg. Logistic Regression&10&0.01\\
 		\hline
@@ -84,7 +92,10 @@ Figure 1 shows how the choice of the \textit{degree} affects the \textit{RMSE} i
 	\label{tab:hyperpam}
 \end{table}
 
-After having optimized the hyperparameters for each model we want to see how the different models perform on the test data from CERN. We therefore submit each prediction on \textit{AICrowd} and see what result it gives us. In table 2 they can be easily compared.
+\section{Results}
+
+
+After having optimized the hyperparameters for each model we want to see how the different models perform on the test data from CERN. We therefore submit each prediction on \textit{AICrowd} and see what result it gives us. In table 2 they can be compared.
 
 
 \begin{table}[htbp]
@@ -93,9 +104,9 @@ After having optimized the hyperparameters for each model we want to see how the
 		\hline
 		Methods&Accuracy&F1-Score\\
 		\hline
-		Least Square&0.821&0.723\\
-		Least Square GD&0.566&0.012\\
-		Least Square SGD&0.391&0.394\\		
+		Least Squares&0.821&0.723\\
+		Least Squares GD&0.566&0.012\\
+		Least Squares SGD&0.391&0.394\\		
 		Ridge Regression&0.815&0.713\\
 		Logistic Regression&0.673&0.12\\
 		Reg. Logistic Regression&0.673&0.12\\
@@ -105,23 +116,19 @@ After having optimized the hyperparameters for each model we want to see how the
 	\label{tab:perform}
 \end{table}
 
-Least Squares performs best ending up with an accuracy of 0.821. For the \textit{degree} we chose the value 11. Ridgre regression performs good as well with an accurate choice of \textit{degree} 10 and \textit{lambda\_} 0.01. It gives an accuracy of 0.815.
-
-
-
-All the other methods perform not as good as two mentioned above. Maybe this is because...´
+Ending up with an accuracy of 0.821 and F1-Score of 0.723, Least Squares performs best amongst all methods. Ridgre regression performs quite good as well, it gives an accuracy of 0.815 and F1-Score of 0.713.
+Logistic and Regularized Logistic Regression give both an accuracy of 0.673 but perform quite bad when taking the F1-Score as accuracy measure. 
 
 \section{Discussion}
 
-As mentioned before, least\_squares performs best concerning accuracy and F1-score. We did not take computational cost in account in order to compare the methods.
-Is it actually surprising, that Least Squares Gradient performs that poor because in theory it would converge to the same optimum as Least Squares. Possible causes for this may be that we did not choose a good \textit{gamma} for the stepsize or we did not do enough iterations. 
+Is it actually surprising, that Least Squares Gradient performs that poor compared to the Least Squares method. In theory the SGD method would converge to the same optimum as Least Squares. Possible causes for this may be that we did not choose a good \textit{gamma} for the stepsize or we did not do enough iterations. The Least Squares Stochastic Gradient Descent performs even worse. Reasons for that might be badly chosen stepsize \textit{gamma} and batchsize. We did not take computational cost in account in order to compare the methods. 
 
-For 
+
 
 
 \section{Summary}
 
-
+In this project we used different regression methods to predict the Higgs Boson. After preprocessing the data and optimizing the hyperparameters for each method using 4-fold cross validation, we have chosen the Least Squares Method to tackle this task. This method performed best concerning Accuracy and F1-Score.  
 
 
 \bibliographystyle{IEEEtran}
