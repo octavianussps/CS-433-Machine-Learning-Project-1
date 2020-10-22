@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 
 
 
-def cross_validation_visualization(degrees, mse_tr, mse_te):
+def cross_validation_visualization_degree(degrees, mse_tr, mse_te):
     """
     visualization the curves of mse_tr and mse_te.
     inputs :
-        degree: List of degrees to be tested
+        degree: List of degrees to be tested 
         mse_tr : List of train error values for the different tested degrees
         mse_te : List of test error values for the different tested degrees
     output:
@@ -21,18 +21,30 @@ def cross_validation_visualization(degrees, mse_tr, mse_te):
     plt.plot(degrees, mse_tr, marker=".", color='b', label='train error')
     plt.plot(degrees, mse_te, marker=".", color='r', label='test error')
     plt.xlabel("degree")
-    
-    #plt.semilogx(degrees, mse_tr, marker=".", color='b', label='train error')
-    #plt.semilogx(degrees, mse_te, marker=".", color='r', label='test error')
-    #plt.xlabel("lambda_")
-    
     plt.ylabel("rmse")
-    
     plt.title("cross validation")
     plt.legend(loc=2)
     plt.grid(True)
     plt.savefig("cross_validation")
 
+def cross_validation_visualization_lamda(lamda, mse_tr, mse_te):
+    """
+    visualization the curves of mse_tr and mse_te.
+    inputs :
+        lamda: List of lamdas to be tested 
+        mse_tr : List of train error values for the different tested degrees
+        mse_te : List of test error values for the different tested degrees
+    output:
+        plot with the given values
+    """
+    plt.plot(degrees, mse_tr, marker=".", color='b', label='train error')
+    plt.plot(degrees, mse_te, marker=".", color='r', label='test error')
+    plt.xlabel("lamdas")
+    plt.ylabel("rmse")
+    plt.title("cross validation")
+    plt.legend(loc=2)
+    plt.grid(True)
+    plt.savefig("cross_validation")
 
 
 def cross_validation_demo():
@@ -41,39 +53,32 @@ def cross_validation_demo():
     output:
         plot with the given values
     """
+    #initialization
     seed = 12
     degrees = np.arange(2,7)
     degree = 12
     k_fold = 4
-    #lambdas = [0.01,0.1]
-    #lambdas = np.logspace(-4, 0, 10)
-    #lambdas = np.concatenate((0,lambdas),axis= None)
-    # split data in k fold
     k_indices = build_k_indices(y, k_fold, seed)
     lambda_ = 0.1
-    # define lists to store the loss of training data and test data
     rmse_tr = []
     rmse_te = []
     # cross validation
     for degree in degrees:
-    #for lambda_ in lambdas:
         rmse_tr_tmp = []
         rmse_te_tmp = []
         for k in range(k_fold):
-            loss_tr, loss_te,_ = cross_validation(y, x, k_indices, k, lambda_, degree)
+            loss_tr, loss_te,_ = cross_validation_visualization_lamda(y, x, k_indices, k, lambda_, degree)
             rmse_tr_tmp.append(loss_tr)
             rmse_te_tmp.append(loss_te)
         rmse_tr.append(np.mean(rmse_tr_tmp))
         rmse_te.append(np.mean(rmse_te_tmp))
 
     cross_validation_visualization(degrees, rmse_tr, rmse_te)
-    #cross_validation_visualization(lamdas rmse_tr, rmse_te)
 
 
 
 if __name__ == '__main__':
     
-
     print("loading data")
     ys_train, x_train, ids_train = load_csv_data("../data/train.csv")
     y_test, x_test, ids_test = load_csv_data("../data/test.csv")
