@@ -85,4 +85,4 @@ exporting csv file
 
 ## **Results**
 
-We achieved a categorical accuracy of 0.801 and a F1- score of 0.723 on the website. All the details are in the report.
+We achieved a categorical accuracy of 0.822 and a F1- score of  0.728 on the website. All the details are in the report.
