@@ -221,7 +221,7 @@ def calculate_loss(y, tx, w):
     	tx = feature matrix
         w : weight
     output:
-        Loss value by negative log likelihood evaluated in w
+        out = loss value by negative log likelihood evaluated in w
     """
     prediction = sigmoid(tx.dot(w))
     loss = y.T.dot(np.log(prediction)) + (1 - y).T.dot(np.log(1 - prediction))
@@ -265,12 +265,12 @@ def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
     inputs:
         y = labels
     	tx = feature matrix
-        w :  weight
-        gamma :  Step size of the iterative method 
-        lambda_: Regularization parameter
+        w =  weight
+        gamma =  Step size of the iterative method 
+        lambda_ = Regularization parameter
     output:
-        w: updated w after 1 step of gradient descent for penalized logistic regression
-        loss: after 1 step of gradient descent for penalized logistic regression
+        w = updated w after 1 step of gradient descent for penalized logistic regression
+        loss = after 1 step of gradient descent for penalized logistic regression
         norm of the gradient
 
     """
