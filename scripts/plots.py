@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 
 
-def cross_validation_visualization_degree(degrees, mse_tr, mse_te):
+def cross_validation_visualization_degrees(degrees, mse_tr, mse_te):
     """
     visualization the curves of mse_tr and mse_te.
     inputs :
@@ -67,13 +67,13 @@ def cross_validation_demo():
         rmse_tr_tmp = []
         rmse_te_tmp = []
         for k in range(k_fold):
-            loss_tr, loss_te,_ = cross_validation_visualization_lamda(y, x, k_indices, k, lambda_, degree)
+            loss_tr, loss_te,_ = cross_validation(y, x, k_indices, k, lambda_, degree)
             rmse_tr_tmp.append(loss_tr)
             rmse_te_tmp.append(loss_te)
         rmse_tr.append(np.mean(rmse_tr_tmp))
         rmse_te.append(np.mean(rmse_te_tmp))
 
-    cross_validation_visualization(degrees, rmse_tr, rmse_te)
+    cross_validation_visualization_degrees(degrees, rmse_tr, rmse_te)
 
 
 
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     ys_train, x_train, ids_train = load_csv_data("../data/train.csv")
     y_test, x_test, ids_test = load_csv_data("../data/test.csv")
 
-    print("preprocessing data")
+    print("preprocessing data (standazation and remove outliers")
     x_test, x_train = standardize(x_test, x_train)
     x_train, ys_train = remove_outliers(x_train, ys_train)
     
