@@ -309,18 +309,11 @@ def predict_labels_log(weights, data):
 def calculate_logistic_loss(y, tx, w):
     """Compute the cost by negative log-likelihood."""
     
-    pred = sigmoid(tx.dot(w))
-    correction_factor = 1e-10;
-    loss = y.T.dot(np.log(pred + correction_factor)) + (1.0 - y).T.dot(np.log((1.0 - pred)+ correction_factor))
-    
-    return np.squeeze(-loss) #removes single dimensional entries
+    return np.dot(tx.T, sigmoid(np.dot(tx,w))-y)
 
 
 def calculate_logistic_gradient(y, tx, w):
     """Compute the gradient of loss for sigmoidal prediction."""
+
     
-    pred = sigmoid(tx.dot(w))
-    err = pred - y
-    grad = np.transpose(tx) @ err
-    
-    return grad
+    return np.dot(tx.T, sigmoid(np.dot(tx,w))-y)

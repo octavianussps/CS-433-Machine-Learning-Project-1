@@ -100,9 +100,9 @@ def ridge_regression(y, tx, lambda_):
 # Logistic Regression
 ################################################
 
-THRESHOLD = 1e-6
+THRESHOLD = 1e-8
 
-def C(y, tx, initial_w, max_iters, gamma):
+def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
     Logistic regression using gradient descent
     """
