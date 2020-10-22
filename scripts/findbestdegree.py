@@ -9,55 +9,69 @@ def build_k_indices(y, k_fold, seed):
     interval = int(num_row / k_fold)
     np.random.seed(seed)
     indices = np.random.permutation(num_row)
-    k_indices = [indices[k * interval: (k + 1) * interval] for k in range(k_fold)]
+    k_indices = [indices[k * interval: (k +  1) * interval] for k in range(k_fold)]
     return np.array(k_indices)
 
 
+
 def cross_validation(y, x, k_indices, k, lambda_, degree):
-    """return the loss of ridge regression."""
-    # get k'th subgroup in test, other k-1 ones in train
-    te_indice = k_indices[k]
-    tr_indice = k_indices[~(np.arange(k_indices.shape[0]) == k)]
-    tr_indice = tr_indice.reshape(-1)
-    y_te = y[te_indice]
-    y_tr = y[tr_indice]
-    x_te = x[te_indice]
-    x_tr = x[tr_indice]
-    # form data with polynomial degree
-    tx_tr = build_poly(x_tr, degree)
-    tx_te = build_poly(x_te, degree)
-    # ridge regression
-    #w,_ = ridge_regression(y_tr, tx_tr, lambda_)
-    w,_ = least_squares(y_tr, tx_tr)
+    # 4-fold, hence k = 4, k-th group is for testings, the other k-1
+    # groups are for training
+    subgroups = k_indices
+    testIndices = subgroups[k]
+    trainIndices = np.delete(subgroups,k,axis=0)
+    trainIndices = np.concatenate((trainIndices[0],trainIndices[1],trainIndices[2]),axis=None)
+    xTrain = x[trainIndices]
+    xTest = x[testIndices]
+    yTrain = y[trainIndices]
+    yTest = y[testIndices]
+    
+    #build data
+    featureMatrixTest = build_poly(xTest,degree)
+    featureMatrixTrain = build_poly(xTrain,degree)
 
-    # calculate the loss for train and test data
-    # print(y_tr.shape,"sss",tx_tr.shape,"de",type(w))
-    loss_tr = np.sqrt(2 * compute_loss(y_tr, tx_tr, w))
-    loss_te = np.sqrt(2 * compute_loss(y_te, tx_te, w))
-    return loss_tr, loss_te,w
+    #wTrain,_ = ridge_regression(yTrain,featureMatrixTrain,lambda_)
+    #wTrain,_ = logistic_regression(yTraiyTrainn, featureMatrixTrain, None, 40, 0.01)
+    #wTrain,_ = least_squares_SGD(yTrain, featureMatrixTrain, None, 30, 0.01)
+    #wTrain,_ = ridge_regression(yTrain, featureMatrixTrain, lambda_)
+    wTrain,_ = least_squares(yTrain, featureMatrixTrain)
+    #wTrain,_ = reg_logistic_regression(yTrain, featureMatrixTrain, lambda_, None, 30, 0.1**(17))
+       
+    # calculate MSE for train and test data !! using the training weights !!
+    loss_tr = np.sqrt(2*compute_loss(yTrain, featureMatrixTrain, wTrain))
+    loss_te = np.sqrt(2*compute_loss(yTest, featureMatrixTest, wTrain))
+    
+    return loss_tr, loss_te, wTrain
 
-def best_degree_selection(x, y, degrees, k_fold, lambdas, seed = 1):
-    # split data in k fold
+
+def find_best_degree(x,y,degrees, k_fold, lambdas, seed = 1):
+    '''find out the best degree of the model 
+    in order to minimize the resulting loss    
+    '''
+    
     k_indices = build_k_indices(y, k_fold, seed)
     
-    #for each degree, we compute the best lambdas and the associated rmse
+    # store in lists (rmse and lambdas)
     best_lambdas = []
     best_rmses = []
-    #vary degree
+    # iterate over given array of degrees
     for degree in degrees:
-        # cross validation
+        #store test errors
         rmse_te = []
         for lambda_ in lambdas:
             rmse_te_tmp = []
+            # perform cross validation
             for k in range(k_fold):
-                _, loss_te,_ = cross_validation(y, x, k_indices, k, lambda_, degree)
+                _, loss_te, _ = cross_validation(y, x, k_indices, k, lambda_, degree)
                 rmse_te_tmp.append(loss_te)
             rmse_te.append(np.mean(rmse_te_tmp))
-        
+        #argmin gives smallest rmse
         ind_lambda_opt = np.argmin(rmse_te)
         best_lambdas.append(lambdas[ind_lambda_opt])
+        #print("degree",degree,"lambda",lambdas[ind_lambda_opt])
         best_rmses.append(rmse_te[ind_lambda_opt])
         
-    ind_best_degree =  np.argmin(best_rmses)       
+    ind_best_degree =  np.argmin(best_rmses)      
+        
     return degrees[ind_best_degree]
 
