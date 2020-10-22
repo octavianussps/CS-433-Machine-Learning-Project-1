@@ -31,6 +31,7 @@ def standardize_col(x1, x2):
     """
     index_x1 = np.where(x1 == -999)
     index_x2 = np.where(x2 == -999)
+    
    
    
     x1_clean = np.delete(x1, index_x1)
@@ -40,8 +41,10 @@ def standardize_col(x1, x2):
  
     x1 = x1 - np.mean(x_clean, axis =0)
     x2 = x2 - np.mean(x_clean, axis =0)
-    x1[index_x1] = 0 
-    x2[index_x2] = 0 # where -999
+    x1[index_x1] = np.mean(x_clean, axis =0) 
+    x2[index_x2] = np.mean(x_clean, axis =0) # where -999
+    #x1[index_x1] = 0 
+    #x2[index_x2] = 0 # where -999
     
     std = np.std(np.append(x1, x2), ddof=1)
 
