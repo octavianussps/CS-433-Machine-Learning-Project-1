@@ -206,7 +206,7 @@ def compute_loss(y, tx, w, kind='mse'):
     """
     error = y - tx.dot(w)
     if kind == 'mse':
-        return error.dot(error)/(2*len(y))
+        return 1/2*np.mean(error**2)
     elif kind == 'mae':
         return sum(np.abs(error))/len(y)
     else:
@@ -305,3 +305,22 @@ def predict_labels_log(weights, data):
     y_prediction[np.where(y_prediction <= 0.5)] = -1
     y_prediction[np.where(y_prediction > 0.5)] = 1
     return y_prediction
+
+def calculate_logistic_loss(y, tx, w):
+    """Compute the cost by negative log-likelihood."""
+    
+    pred = sigmoid(tx.dot(w))
+    correction_factor = 1e-10;
+    loss = y.T.dot(np.log(pred + correction_factor)) + (1.0 - y).T.dot(np.log((1.0 - pred)+ correction_factor))
+    
+    return np.squeeze(-loss) #removes single dimensional entries
+
+
+def calculate_logistic_gradient(y, tx, w):
+    """Compute the gradient of loss for sigmoidal prediction."""
+    
+    pred = sigmoid(tx.dot(w))
+    err = pred - y
+    grad = np.transpose(tx) @ err
+    
+    return grad

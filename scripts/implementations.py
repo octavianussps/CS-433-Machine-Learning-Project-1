@@ -102,7 +102,7 @@ def ridge_regression(y, tx, lambda_):
 
 THRESHOLD = 1e-6
 
-def logistic_regression(y, tx, initial_w, max_iters, gamma):
+def C(y, tx, initial_w, max_iters, gamma):
     """
     Logistic regression using gradient descent
     """
@@ -115,9 +115,9 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     # logistic regression
     for i in range(max_iters):
         # learning by gradient descent
-        grad = calculate_gradient(y, tx, w)
+        grad = calculate_logistic_gradient(y, tx, w)
         # compute loss by negative log likelihood
-        loss = calculate_loss(y, tx, w)
+        loss = calculate_logistic_loss(y, tx, w)
         #loss /= tx.shape[1]
         print("loss",loss)
         w -= gamma * grad
