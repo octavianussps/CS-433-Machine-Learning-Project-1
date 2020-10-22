@@ -16,23 +16,20 @@ def gradient_descent(y, tx, initial_w, max_iters, gamma):
     	ws = weights corresponding to logistic regression solution
     	losses = mse loss corresponding to the logistic regression solution
     """
-
-    print("using gradient descent{}".format(len(y)))
-    # Define parameters to store w and loss
     ws = []
-    
     losses = []
-    w = initial_w
-    ws.append(w)
+    weight = initial_w
+    ws.append(weight)
     for n_iter in range(max_iters):
-       
-        gradient = compute_gradient(y,tx,w)
-        loss = compute_loss(y,tx,w)
+        # compute loss, gradient
+        gradient = compute_gradient(y,tx,weight)
+        loss = compute_loss(y,tx,weight)
         if np.isinf(loss):
-             raise ValueError("Infinite loss in least_squares_GD with gamma %.0e, exiting."%gamma)
-        w = w - gamma * gradient
+             raise ValueError("Infinite loss with gamma %.0e, exiting."%gamma)
+        # gradient w by descent update
+        weight = weight - gamma * gradient
         # store w and loss
-        ws.append(w)
+        ws.append(weight)
         losses.append(loss)
     return losses, ws
 
@@ -90,8 +87,10 @@ def stochastic_gradient_descent(y, tx, initial_w, batch_size, max_iters, gamma):
     w = initial_w
     for n_iter in range(max_iters):
         for y_batch, tx_batch in batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
+            # compute a stochastic gradient and loss
             gradient = compute_stoch_gradient(y_batch,tx_batch,w)
             loss = compute_loss(y,tx,w)
+            # update w through the stochastic gradient update
             w = w - gamma * gradient
             # store w and loss
             ws.append(w)
@@ -152,10 +151,10 @@ def new_labels(w, tx):
     output
         y_pred :class predictions given weights, and a test data matrix
     """
-    y_pred = tx.dot(w)
-    y_pred[np.where(y_pred <= 0.5)] = 0
-    y_pred[np.where(y_pred > 0.5)] = 1
-    return y_pred
+    y_prediction = tx.dot(w)
+    y_prediction[np.where(y_prediction <= 0.5)] = 0
+    y_prediction[np.where(y_prediction > 0.5)] = 1
+    return y_prediction
 
 def compute_gradient(y, tx, w, kind='mse'):
     """
@@ -167,6 +166,7 @@ def compute_gradient(y, tx, w, kind='mse'):
         kind : mse or mae
     output:
          Gradient for loss function evaluated in w
+    raise : NotImplementedError
     """
     error = y - tx.dot(w)
     if kind == 'mse':
@@ -182,14 +182,15 @@ def calculate_gradient(y, tx, w):
     inputs:
         y = labels
     	tx = feature matrix
-        w : weight
+        w = weight
     output:
-        gradient of the negative log likelihood loss function
+        out = gradient of the negative log likelihood loss function
     """
     y_pred = new_labels(w, tx)
     s = sigmoid(y_pred)
     k = 1.0 / y.shape[0]
-    return k * np.transpose(tx).dot(s - y)
+    out = k * np.transpose(tx).dot(s - y)
+    return out
 
 def compute_loss(y, tx, w, kind='mse'):
     """
@@ -201,6 +202,7 @@ def compute_loss(y, tx, w, kind='mse'):
         kind: mae or mse
     output:
         the loss
+    raise NotImplementedError
     """
     error = y - tx.dot(w)
     if kind == 'mse':
@@ -221,9 +223,10 @@ def calculate_loss(y, tx, w):
     output:
         Loss value by negative log likelihood evaluated in w
     """
-    pred = sigmoid(tx.dot(w))
-    loss = y.T.dot(np.log(pred)) + (1 - y).T.dot(np.log(1 - pred))
-    return np.squeeze(- loss)
+    prediction = sigmoid(tx.dot(w))
+    loss = y.T.dot(np.log(prediction)) + (1 - y).T.dot(np.log(1 - prediction))
+    out = np.squeeze(- loss)
+    return out
 
 def calculate_loss_reg(y, tx, w, lambda_):
     """
@@ -282,9 +285,9 @@ def predict_labels(w, data):
         w: weights
         data: the test data
     output:
-        y_pred : predictions for w and the data matrix for Least Squares
+        y_prediction : predictions for w and the data matrix for Least Squares
     """
-    y_pred = np.dot(data, w)
-    y_pred[np.where(y_pred <= 0)] = -1
-    y_pred[np.where(y_pred > 0)] = 1
-    return y_pred
+    y_prediction = np.dot(data, w)
+    y_prediction[np.where(y_prediction <= 0)] = -1
+    y_prediction[np.where(y_prediction > 0)] = 1
+    return y_prediction
