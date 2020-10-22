@@ -1,3 +1,5 @@
-
-*.csv
 scripts/preprocessing.ipynb
+data/test.csv
+data/train.csv
+data/.ipynb_checkpoints/test-checkpoint.csv
+data/.ipynb_checkpoints/train-checkpoint.csv
