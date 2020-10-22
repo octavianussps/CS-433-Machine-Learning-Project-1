@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 import numpy as np
 from helpers import *
-
-
 ######################################
-# Least Squares Functions
+# Helper Functions
 ######################################
+
 
 
 
@@ -23,6 +22,7 @@ def least_squares(y, tx):
     	mse = mse loss corresponding to the least squares solution
     
     """	
+    #weights = np.linalg.lstsq(tx,y)
     weights = np.linalg.solve(tx.T.dot(tx),tx.T.dot(y))
     mse = compute_loss(y,tx,weights) 
     return weights, mse
@@ -46,7 +46,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     """
     if (initial_w is None):
         initial_w = np.zeros(tx.shape[1])
-    w = initial_w.astype(float)
+    w = initial_w
     losses, ws = gradient_descent(y, tx, w, max_iters, gamma)
     weights = ws[-1]
     mse = losses[-1] 
@@ -87,49 +87,27 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
 
 def ridge_regression(y, tx, lambda_):
     """
-    Ridge regression using normal equations
+    Implement ridge regression
+    """
+    a = tx.T.dot(tx)+2*tx.shape[0]*lambda_*np.eye(tx.shape[1])
+    b = tx.T.dot(y)
+    wRidge = np.linalg.solve(a,b)
+    return wRidge, compute_loss(y, tx, wRidge)
     
-    input: 
-    	y = labels
-    	tx = feature matrix
-        lambda_ :  Regularization parameter
-    
-    output:
-    	w = weights corresponding to ridge regression solution
-    	mse = mse loss corresponding to the ridge regression solution
-    
-    """	
-    txt = np.transpose(tx)
-    w = np.linalg.solve((txt.dot(tx) + lambda_ * 2 * y.shape[0] * np.identity(tx.shape[1])), txt.dot(y))
-    return w, compute_loss(y, tx, w)
 
 
 ################################################
 # Logistic Regression
 ################################################
 
-# Threshold condition (can me modified)
 THRESHOLD = 1e-6
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
-    
     Logistic regression using gradient descent
-    
-    input: 
-    	y = labels
-    	tx = feature matrix
-        initial_w = vector of initial weights
-        max_iters = number of maximum iterations on the loop
-        gamma :  Step size of the iterative method
-    
-    output:
-    	w = weights corresponding to logistic regression solution
-    	losses[-1] = mse loss corresponding to the logistic regression solution
     """
-
-   # initializing the weight
     losses = []
+    # initializing the weight in the case there is none
     if (initial_w is None):
         initial_w = np.zeros(tx.shape[1])
     w = initial_w
@@ -138,10 +116,13 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     for i in range(max_iters):
         # learning by gradient descent
         grad = calculate_gradient(y, tx, w)
+        # compute loss by negative log likelihood
         loss = calculate_loss(y, tx, w)
+        #loss /= tx.shape[1]
+        print("loss",loss)
         w -= gamma * grad
         losses.append(loss)
-        # stop
+        # convergence criterion
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < THRESHOLD:
             gamma = gamma / 10
             if gamma < 1e-10:
@@ -153,19 +134,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     """
-    
-    Regularized Logistic regression using gradient descent
-    
-    input: 
-    	y = labels
-    	tx = feature matrix
-        initial_w = vector of initial weights
-        max_iters = number of maximum iterations on the loop
-        gamma :  Step size of the iterative method
-    
-    output:
-    	w = weights corresponding to logistic regression solution
-    	losses[-1] = mse loss corresponding to the logistic regression solution
+    applies regularized logistic regression using stochastic gradient descent to optimize w
     """
     # initializing the weight
     if (initial_w is None):
@@ -173,7 +142,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     w = initial_w
     losses = []
 
-     # regularized logistic regression
+    # regularized logistic regression, choose big max_iters because of really small lambda
     for i in range(max_iters):
         w, loss, grad_norm = learning_by_penalized_gradient(y, tx, w, gamma, lambda_)
         losses.append(loss)
