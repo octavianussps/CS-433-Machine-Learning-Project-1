@@ -255,8 +255,8 @@ def penalized_logistic_regression(y, tx, w, lambda_):
         gradient;
     """
     num_samples = y.shape[0]
-    loss = calculate_loss(y, tx, w) + lambda_ * np.squeeze(w.T.dot(w))
-    gradient = calculate_gradient(y, tx, w) + 2 * lambda_ * w
+    loss = calculate_loss(y, tx, w) + (lambda_ / (2 * num_samples)) * np.power(np.linalg.norm(w), 2)
+    gradient = calculate_gradient(y, tx, w) +(1 / tx.shape[0]) * lambda_ * w
     return loss, gradient
 
 def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
@@ -290,4 +290,18 @@ def predict_labels(w, data):
     y_prediction = np.dot(data, w)
     y_prediction[np.where(y_prediction <= 0)] = -1
     y_prediction[np.where(y_prediction > 0)] = 1
+    return y_prediction
+
+def predict_labels_log(weights, data):
+    """
+    Generates class predictions given weights, and a test data matrix for Log
+    inputs : 
+        w: weights
+        data: the test data
+    output:
+        y_prediction : predictions for w and the data matrix for Least Squares
+    """
+    y_prediction = np.dot(data, weights)
+    y_prediction[np.where(y_prediction <= 0.5)] = -1
+    y_prediction[np.where(y_prediction > 0.5)] = 1
     return y_prediction
