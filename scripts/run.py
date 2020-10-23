@@ -36,12 +36,13 @@ def main():
 
 
     print("training model with least squares")
-    #w, mse = least_squares(ys_train, tx_train)
+    wInit, mse = least_squares(ys_train, tx_train)
 	
-    max_iters = 500
-    gamma = 0.1**(16)
+    max_iters = 100
+    gamma = 0.1**(20)
     #w,mse = least_squares_GD(ys_train, tx_train, None, max_iters, gamma)
-    w,mse = logistic_regression(ys_train, tx_train, None, max_iters, gamma)
+    
+    w,mse = logistic_regression(ys_train, tx_train, wInit, max_iters, gamma)
     #w, mse = reg_logistic_regression(ys_train, tx_train, lambda_, None, max_iters, gamma)
     #w, mse = ridge_regression(ys_train, tx_train, lambda_)
     #w,mse = least_squares_GD(ys_train, tx_train, initial_w, max_iters, gamma)

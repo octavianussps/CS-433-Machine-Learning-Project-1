@@ -100,7 +100,7 @@ def ridge_regression(y, tx, lambda_):
 # Logistic Regression
 ################################################
 
-THRESHOLD = 1e-8
+THRESHOLD = 1e-6
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
@@ -111,18 +111,17 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     if (initial_w is None):
         initial_w = np.zeros(tx.shape[1])
     w = initial_w
-
+	
     # logistic regression
+    # start the logistic regression
     for i in range(max_iters):
-        # learning by gradient descent
-        grad = calculate_logistic_gradient(y, tx, w)
-        # compute loss by negative log likelihood
-        loss = calculate_logistic_loss(y, tx, w)
-        #loss /= tx.shape[1]
-        print("loss",loss)
-        w -= gamma * grad
+        # get loss and update w.
+        loss, w = learning_by_gradient_descent(y, tx, w, gamma)
+        print(loss)
+        print(i)
+        
+        # converge criterion
         losses.append(loss)
-        # convergence criterion
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < THRESHOLD:
             gamma = gamma / 10
             if gamma < 1e-10:
@@ -130,6 +129,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         if i > 100 and losses[-1] > losses[-100]:
             gamma = gamma / 10
     return w, losses[-1]
+
 
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
