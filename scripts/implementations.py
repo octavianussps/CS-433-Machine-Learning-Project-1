@@ -75,9 +75,9 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
     w = initial_w
     # default batch_size = 1
     batch_size = 1
-    losses, ws = stochastic_gradient_descent(y, tx, w, batch_size, max_iters, gamma)
+    ws = stochastic_gradient_descent(y, tx, w, batch_size, max_iters, gamma)
     weights = ws[-1]
-    mse = losses[-1] 
+    mse = compute_loss(y,tx,weights)
     return weights, mse
 
 
@@ -117,8 +117,8 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     for i in range(max_iters):
         # get loss and update w.
         loss, w = learning_by_gradient_descent(y, tx, w, gamma)
-        print(loss)
-        print(i)
+       # print(loss)
+       #print(i)
         
         # converge criterion
         losses.append(loss)

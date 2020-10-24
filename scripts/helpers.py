@@ -79,23 +79,20 @@ def stochastic_gradient_descent(y, tx, initial_w, batch_size, max_iters, gamma):
     
     outputs:
     	ws = weights corresponding to stochastic regression solution
-    	losses = mse loss corresponding to the stochastic regression solution
     
     """
     ws = [initial_w]
-    losses = []
     w = initial_w
     for n_iter in range(max_iters):
+        #For SGD, the batch has size 1
         for y_batch, tx_batch in batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
             # compute a stochastic gradient and loss
             gradient = compute_stoch_gradient(y_batch,tx_batch,w)
-            loss = compute_loss(y,tx,w)
             # update w through the stochastic gradient update
             w = w - gamma * gradient
-            # store w and loss
-            ws.append(w)
-            losses.append(loss)
-    return losses, ws
+            # store w
+            ws.append(w)      
+    return ws
 
 def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
     """
@@ -306,7 +303,14 @@ def predict_labels_log(weights, data):
     return y_prediction
 
 def calculate_logistic_loss(y, tx, w):
-    """Compute the cost by negative log-likelihood."""
+    """Compute the cost by negative log-likelihood.
+     inputs :
+         y = labels
+    	tx = feature matrix
+        w: weights
+    output:
+       cost by negative log likehood
+    """
     
     pred = sigmoid(tx.dot(w))
     correction_factor = 1e-10;
@@ -316,7 +320,13 @@ def calculate_logistic_loss(y, tx, w):
 
 
 def calculate_logistic_gradient(y, tx, w):
-    """Compute the gradient of loss for sigmoidal prediction."""
+    """Compute the gradient of loss for sigmoidal prediction.
+     inputs :
+         y = labels
+    	tx = feature matrix
+        w: weights
+    output:
+       grad : logistic grad"""
     
     pred = sigmoid(tx.dot(w))
     err = pred - y
@@ -328,8 +338,15 @@ def calculate_logistic_gradient(y, tx, w):
     
 def learning_by_gradient_descent(y, tx, w, gamma):
     """
-    Do one step of gradient descen using logistic regression.
-    Return the loss and the updated w.
+    Do one step of gradient descent using logistic regression.
+    inputs :
+         y = labels
+    	tx = feature matrix
+        w: weights
+        gamma =  Step size of the iterative method 
+    output:
+      loss
+      w
     """
     # compute the cost/loss
     loss = calculate_loss(y,tx,w)
