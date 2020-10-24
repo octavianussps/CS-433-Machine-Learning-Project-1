@@ -42,6 +42,7 @@ def main():
     gamma = 0.1**(20)
     w,mse = least_squares_GD(ys_train, tx_train, None, max_iters, gamma)
 
+    
     #w,mse = least_squares_SGD(ys_train, tx_train, w, max_iters, gamma)
     #w,mse = logistic_regression(ys_train, tx_train, wInit, max_iters, gamma)
     #w, mse = reg_logistic_regression(ys_train, tx_train, lambda_, None, max_iters, gamma)
