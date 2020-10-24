@@ -42,7 +42,7 @@ def main():
     gamma = 0.1**(20)
     w,mse = least_squares_GD(ys_train, tx_train, None, max_iters, gamma)
 
-    w,mse = least_squares_SGD(ys_train, tx_train, w, max_iters, gamma)
+    #w,mse = least_squares_SGD(ys_train, tx_train, w, max_iters, gamma)
     #w,mse = logistic_regression(ys_train, tx_train, wInit, max_iters, gamma)
     #w, mse = reg_logistic_regression(ys_train, tx_train, lambda_, None, max_iters, gamma)
     #w, mse = ridge_regression(ys_train, tx_train, lambda_)
@@ -50,10 +50,11 @@ def main():
 	
     print("predicting labels for test data")
     y_pred = predict_labels(w, tx_test)
+    # y_pred = predict_labels_log(w, data)
 
     print("exporting csv file")
     name_out = "{}/submission.csv".format(OUT_DIR)
-    create_csv_submission(ids_test, y_pred, "{}/submission.csv".format(OUT_DIR))
+    create_csv_submission(ids_test, y_pred, "{}/submission1.csv".format(OUT_DIR))
     #create_csv_submission(ids_test, y_pred, "{}/submission-{}.csv".format(OUT_DIR, datetime.now()))
 
 

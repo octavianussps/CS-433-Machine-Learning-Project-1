@@ -50,6 +50,7 @@ def main():
 	
     print("predicting labels for test data")
     y_pred = predict_labels(w, tx_test)
+    # y_pred = predict_labels_log(w, data)
 
     print("exporting csv file")
     name_out = "{}/submission.csv".format(OUT_DIR)
