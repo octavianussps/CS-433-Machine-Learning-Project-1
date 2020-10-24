@@ -254,9 +254,9 @@ def penalized_logistic_regression(y, tx, w, lambda_):
         gradient;
     """
     num_samples = y.shape[0]
-    loss = calculate_loss(y, tx, w) + (lambda_ / (2 * num_samples)) * np.power(np.linalg.norm(w), 2)
-    gradient = calculate_gradient(y, tx, w) +(1 / tx.shape[0]) * lambda_ * w
-    return loss, gradient
+    loss = calculate_loss(y, tx, w) + lambda_  * np.squeeze(w.T.dot(w))
+    grad = calculate_gradient(y, tx, w) + 2 * lambda_ * w
+    return loss, grad
 
 def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
     """
