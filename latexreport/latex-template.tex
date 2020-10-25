@@ -31,9 +31,9 @@ We afterwards delete outliers: values, which are further away from the mean than
 \\
 The preprocessing deals with:
 \begin{itemize}
-	\item Deletion of outliers in the train data
-	\item Deletion of the entries in the sample that contains the -999 value
-	\item Substitution of the values -999 by the mean of the corresponding values 
+	\item Substitution of the -999 values for each entries using the mean of "clean" data in train and test dataset
+	\item Normalizing/standardizing the value for all entries with standar deviation and mean
+	\item Deletion of outliers in the train data (set the treshold to cut off the entries)
 \end{itemize}
 
 
@@ -50,7 +50,7 @@ The preprocessing deals with:
 
 
 In order to find out, which approaches of preprocessing yield good results, we evaluate their effect on the MSE. In figure 1 we used Least Squares to demonstrate this. In can be observed, that just standardizing does not help us to preprocess the data in a good way because the MSE is still quiet high. 
-By substituting the -999 values by the mean of the data, a big reduction in the loss can be achieved. Furthermore the loss can be reduced by standardizing the data and removing outliers. \\
+By substituting the -999 values by the mean of the data, a big reduction in the loss can be achieved. Furthermore the loss can be reduced by standardizing the data and removing outliers. For removing outlier, we plotted the boxplot to observe the quantiles of each features. and we use this value as threshold to filter out the outlier of each data point.\\
 
 
 
