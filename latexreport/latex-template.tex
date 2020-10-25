@@ -31,12 +31,18 @@ We afterwards delete outliers: values, which are further away from the mean than
 \\
 The preprocessing deals with:
 \begin{itemize}
-	\item Substitution of the -999 values for each entries using the mean of "clean" data in train and test dataset
+	\item Substitution of the -999 values for each entries using the mean of \textit{clean} data in train and test dataset
 	\item Normalizing/standardizing the value for all entries with standar deviation and mean
 	\item Deletion of outliers in the train data (set the treshold to cut off the entries)
 \end{itemize}
 
-
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\columnwidth]{trainBoxPlot.png}
+	\caption{Boxplot for train dataset. )
+	\vspace{-3mm}
+	\label{fig:prepro}
+\end{figure}
 
 
 
@@ -127,7 +133,7 @@ After having optimized the hyperparameters for each model we want to see how the
 	\label{tab:perform}
 \end{table}
 
-Ending up with an accuracy of 0.821 and F1-Score of 0.723, Least Squares performs best amongst all methods. Least Squares Gradient and Stochastic Gradient methods in contrast perform not very well. 
+Ending up with an accuracy of 0.822 and F1-Score of 0.728, Least Squares performs best amongst all methods. Least Squares Gradient and Stochastic Gradient methods in contrast perform not very well. 
 Ridgre regression performs quite good as well, it gives an accuracy of 0.815 and F1-Score of 0.713.
 Logistic and Regularized Logistic Regression give both an accuracy of approx. 0.67 but perform quite bad when taking the F1-Score as accuracy measure. 
 
