@@ -29,18 +29,19 @@ def main():
     k_fold = 4
     # best degree selection uses cross validation to find the best lambda/degree
     #best_degree = find_best_degree(x_train, ys_train, degrees, k_fold, lambdas);
-    best_degree = 10
+    best_degree = 11
     print("building polynomial with degree", best_degree)
     tx_train = build_poly(x_train, best_degree)
     tx_test = build_poly(x_test, best_degree)
 
 
     print("training model with least squares")
-    wInit, mse = least_squares(ys_train, tx_train)
+    w, mse = least_squares(ys_train, tx_train)
+	
 	
     max_iters = 100
     gamma = 0.1**(20)
-    w,mse = least_squares_GD(ys_train, tx_train, None, max_iters, gamma)
+    #w,mse = least_squares_GD(ys_train, tx_train, None, max_iters, gamma)
 
     
     #w,mse = least_squares_SGD(ys_train, tx_train, w, max_iters, gamma)
