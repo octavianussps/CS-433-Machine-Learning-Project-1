@@ -56,8 +56,8 @@ def main():
 
     print("exporting csv file")
     name_out = "{}/submission.csv".format(OUT_DIR)
-    create_csv_submission(ids_test, y_pred, "{}/submission1.csv".format(OUT_DIR))
-    #create_csv_submission(ids_test, y_pred, "{}/submission-{}.csv".format(OUT_DIR, datetime.now()))
+    #create_csv_submission(ids_test, y_pred, "{}/submission1.csv".format(OUT_DIR))
+    create_csv_submission(ids_test, y_pred, "{}/submission-{}.csv".format(OUT_DIR, datetime.now()))
 
 
 if __name__ == '__main__':

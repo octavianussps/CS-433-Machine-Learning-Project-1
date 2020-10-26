@@ -35,6 +35,10 @@ In `scripts/` we can see:
 
 +  `findbestdegree.py` is a script which uses cross validation in order to find out the best degree and/or the best lambda for the different methods as well as functions to load and submit the data.
 
++ `checkAllImplementation.py` is a script with run all programm in implementation and give us the MSE and the last weight obtained
+
++ `checkPreprocessing.ipynb` is a script with help us to understand the preprocessing
+
 +  `plots.py` visualizes the affect of different choices of hyperparameters on the RMSE of the method respectively.
 
 +  `preprocessing.py` preprocesses the data i.e. standardizes it and removes outliers and missing values.
