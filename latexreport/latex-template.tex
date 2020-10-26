@@ -26,9 +26,9 @@ Then we implement the six different methods: Least Squares, Least Squares GD, Le
 
 \section{Data Preprocessing}
 \label{sec:prepro}
-In order to deal with the data, we need to standardize it. The standardization helps us to scale the data in a bounded interval. We standardize both, the test and the train data set. \\
-We afterwards delete outliers: values, which are further away from the mean than a certain threshold. 
-\\
+%In order to deal with the data, we need to standardize %it. The standardization helps us to scale the data in %a bounded interval. We standardize both, the test and %the train data set. \\
+%We afterwards delete outliers: values, which are %further away from the mean than a certain threshold. 
+%\\
 The preprocessing deals with:
 \begin{itemize}
 	\item Substitution of the -999 values for each entries using the mean of \textit{clean} data in train and test dataset
@@ -37,27 +37,26 @@ The preprocessing deals with:
 \end{itemize}
 
 
-
-
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\columnwidth]{preprocessing.png}
-	\caption{MSE for different approaches of preprocessing using least squares to evulate their effect.}
+	\caption{MSE for different approaches of preprocessing using least squares to evaluate their effect.}
 	\vspace{-3mm}
 	\label{fig:prepro}
 \end{figure}
 
-\begin{figure}[htbp]
+
+\begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{trainBoxPlot.png}
-	\caption{Boxplot for train dataset. )
+	\caption{Boxplot for train dataset. }
 	\vspace{-3mm}
 	\label{fig:boxplottrainset}
 \end{figure}
 
 
 In order to find out, which approaches of preprocessing yield good results, we evaluate their effect on the MSE. In figure 1 we used Least Squares to demonstrate this. In can be observed, that just standardizing does not help us to preprocess the data in a good way because the MSE is still quiet high. 
-By substituting the -999 values by the mean of the data, a big reduction in the loss can be achieved. Furthermore the loss can be reduced by standardizing the data and removing outliers. For removing outlier, we plotted the boxplot to observe the quantiles of each features. and we use this value as refereced threshold by adding bias (some small integer) to filter out the data points in which the values overly exceeding the quantiles. In this particular experiment, we set the treshold to 8.5 since the maximum quantile value for all 30 features is around 6-7 as shown in figure 2.\\
+By substituting the -999 values by the mean of the data, a big reduction in the loss can be achieved. Furthermore the loss can be reduced by doing both, standardizing the data and removing outliers. For removing outliers, we plotted the boxplot to observe the quantiles of each features. and we use this value as referenced threshold by adding bias (some small integer) to filter out the data points in which the values overly exceeding the quantiles. In this particular experiment, we set the treshold to 8.5 since the maximum quantile value for all 30 features is around 6-7 as shown in figure 2.\\
 
 
 
@@ -65,9 +64,9 @@ By substituting the -999 values by the mean of the data, a big reduction in the 
 \label{sec:tips-writing}
 
 
-For each model we run 4-fold cross validation on our training data to tune our hyperparameters in order to optimize our model. The hyperparameters in this case are the \textit{degree} for all the models and the constant \textit{lambda} for the Ridge Regression and the Regularized Logistic Regression.
+For each model we run 4-fold cross validation on our training data to tune our hyperparameters in order to optimize our model. The hyperparameters in this case are the \textit{degree} for all the models and the constant \textit{lambda} for the Ridge Regression and the Reg. Logistic Regression.
 \\
-Figure 3 shows how the choice of the \textit{degree} affects the \textit{RMSE} in the case of Least Squares. We run the cross validation for degrees between 1 and 13 and find out, that for degree = 11 we get our best result. For higher degrees the model will overfit and lower degrees instead give a bigger \textit{RMSE}, hence the model underfits.
+Figure 3 shows how the choice of the \textit{degree} affects the \textit{RMSE} in the case of Least Squares. We run the cross validation for degrees between 1 and 13 and find out, that for degree = 11 we get our best result. For higher degrees the model will overfit whereas for lower degrees it underfits.
 
 \begin{figure}[htbp]
   \centering
@@ -81,13 +80,13 @@ Figure 3 shows how the choice of the \textit{degree} affects the \textit{RMSE} i
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\columnwidth]{cross_validation_ridge_degree_12.png}
-	\caption{RMSE for different lambdas using ridge\_regression (degree 12).}
+	\caption{RMSE for different lambdas using Ridge Regression (deg. 12).}
 	\vspace{-3mm}
 	\label{fig:crossvalidationridge}
 \end{figure}
  %%%%pic to be added
  %%% find optimal lambda
- For the Ridge Regression a degree of 12 gives the best result. Using cross validation we computed the \textit{RMSE} for different values of \textit{lambda} in order to optimize this second hyperparameter. We find out, that a value of approximately 0.0059 gives the best result, which can be checked in Figure 4. When we choose this value too small, the test error gets much bigger, whereas the training error reduces. If \textit{lambda} is too big, both, the test and training error augment.\\
+ For the Ridge Regression a degree of 12 gives the best result. We then again run cross validation to optimize the second hyperparameter \textit{lambda}. A value of 0.00599 gives the best result, which can be checked in Figure 4. When we choose this value too small, the test error gets much bigger, whereas the training error reduces. If \textit{lambda} is too big, both, the test and training error augment.
  The final used hyperparameter for each method can be found in table 1.\\
 
 
@@ -101,7 +100,7 @@ Figure 3 shows how the choice of the \textit{degree} affects the \textit{RMSE} i
 		Least Squares GD& 10 & -\\
 		Least Squares SGD & 10 &-\\		Ridge Regression&12&0.00599\\
 		Logistic Regression & 10&-\\
-		Reg. Logistic Regression&10&0.01\\
+		Reg. Logistic Regression&10&100\\
 		\hline
 	\end{tabular}
 	\caption{Optimized hyperparameters computed\\ through 4-fold cross validation.}
@@ -134,7 +133,7 @@ After having optimized the hyperparameters for each model we want to see how the
 	\label{tab:perform}
 \end{table}
 
-Ending up with an accuracy of 0.822 and F1-Score of 0.728, Least Squares performs best amongst all methods. Least Squares Gradient and Stochastic Gradient methods in contrast perform not very well. 
+Ending up with an accuracy of 0.822 and F1-Score of 0.728, Least Squares performs best amongst all methods. Both Least Squares Descent methods in contrast perform not very well. 
 Ridgre regression performs quite good as well, it gives an accuracy of 0.815 and F1-Score of 0.713.
 Logistic and Regularized Logistic Regression give both an accuracy of approx. 0.67 but perform quite bad when taking the F1-Score as accuracy measure. 
 
@@ -142,14 +141,14 @@ Logistic and Regularized Logistic Regression give both an accuracy of approx. 0.
 \section{Discussion}
 
  
-Least Squares Gradient performs not as good as the Least Squares method, even though in theory it would converge to the same optimum. We had to choose a quite small \textit{gamma} (approx $10^{-19}$) for not making explode the loss. The stepsize can be concerned as an additional hyperparameter which to choose correctly. The Least Squares Stochastic Gradient Descent performs even worse. Reasons for that might be also badly chosen stepsize \textit{gamma} and batchsize.\\
-We did not take computational cost into account and Least Squares gave us a good result. That's why we did not focus that much on optimizing the stepsize in order to make the both Gradient methods perform better. \\
-Logistic Regressions and Regularized Logistic Regression perform quite similar which is actually surprising, given the fact that the additional penalty term is supposed to avoid overfitting, hence to support simpler models. But since we ended up with an optimal degree of 10 for both methods, we might have chosen \textit{lambda} to small to have a real impact. For Logistic Regression and Regularized Logistic Regression we set the initial weight as the weight we got from Least Square and by doing this we got better result compared to initiate the weight with zero or random values. 
+Least Squares Gradient performs not as good as the Least Squares method, even though in theory it would converge to the same optimum. We had to choose a quite small \textit{gamma} (approx $10^{-19}$) for not making explode the loss. The stepsize can be concerned as an additional hyperparameter which to choose correctly. The Least Squares Stochastic Gradient Descent performs even worse. Reasons for that might be also badly chosen stepsize \textit{gamma} and batchsize.
+Since Least Squares gave us a good result, we did not focus that much on optimizing the stepsize in order to make the both Gradient methods perform better. \\
+Logistic Regressions and Reg. Logistic Regression perform quite similar which is actually surprising, given the fact that the additional penalty term is supposed to support simpler models. But since we ended up with an optimal degree of 10 for both methods, we might have chosen \textit{lambda} to small for having a real impact. For both of those methods we set the initial weight as the weight we got from Least Squares. By doing so we got better results compared to initiating the weight with zero or random values. 
 
 
 \section{Summary}
 
-In this project we used different regression methods to predict the Higgs Boson. After preprocessing the data and optimizing the hyperparameters for each method using 4-fold cross validation, we have chosen the Least Squares Method to tackle this task. This method performed best concerning Accuracy = 0.822 and F1-Score = 0.728.
+In this project we used different regression methods to predict the Higgs Boson. After preprocessing the data and optimizing the hyperparameters for each method using 4-fold cross validation, we have chosen the Least Squares Method to tackle this task. This method performed best with Accuracy = 0.822 and F1-Score = 0.728.
 
 
 
